@@ -36,25 +36,7 @@ const BuyNowButton = () => {
       className='upgrade-to-pro-button mui-fixed'
       sx={{ right: theme => theme.spacing(20), bottom: theme => theme.spacing(10), zIndex: 11, position: 'fixed' }}
     >
-      {/* <Button
-        component='a'
-        target='_blank'
-        variant='contained'
-        onMouseEnter={handleOpen}
-        onMouseLeave={handleClose}
-        ref={e => setReferenceElement(e)}
-        href='https://themeselection.com/products/materio-mui-react-nextjs-admin-template/'
-        sx={{
-          backgroundColor: '#ff3e1d',
-          boxShadow: '0 1px 20px 1px #ff3e1d',
-          '&:hover': {
-            boxShadow: 'none',
-            backgroundColor: '#e6381a'
-          }
-        }}
-      >
-        Upgrade To Pro
-      </Button> */}
+
       <Fade in={open} timeout={700}>
         <Box
           style={styles.popper}
@@ -74,11 +56,7 @@ const BuyNowButton = () => {
             </a>
             <CardContent>
               <Typography sx={{ mb: 4 }} variant='h6'>
-                Materio - React Admin Template
-              </Typography>
-              <Typography sx={{ mb: 4 }} variant='body2'>
-                Materio Admin is the most developer friendly & highly customizable Admin Dashboard Template based on MUI
-                and NextJS.
+                PMS
               </Typography>
               <Typography sx={{ mb: 4 }} variant='body2'>
                 Click on below buttons to explore PRO version.
