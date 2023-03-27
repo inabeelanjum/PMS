@@ -1,9 +1,11 @@
 // ** React Imports
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+
+import UserService from '../../../services/UserService.js'
 
 // ** MUI Components
 import Box from '@mui/material/Box'
@@ -23,10 +25,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel from '@mui/material/FormControlLabel'
 
 // ** Icons Imports
-import Google from 'mdi-material-ui/Google'
-import Github from 'mdi-material-ui/Github'
-import Twitter from 'mdi-material-ui/Twitter'
-import Facebook from 'mdi-material-ui/Facebook'
+
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
@@ -64,6 +63,34 @@ const LoginPage = () => {
     showPassword: false
   })
 
+ 
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+  const password = values.password
+
+  const payload = {
+    email,
+    password
+  }
+
+  const handleSubmit = event => {
+    event.preventDefault()
+    setLoading(true)
+
+    UserService.login(payload)
+      .then((data) => {
+        if(data.responseCode === 2000)
+        console.log(data)
+        router.push('/')
+        // window.location.reload()
+      })
+      .catch(error => {
+        setError(true)
+        setLoading(false)
+      })
+  }
+
   // ** Hook
   const theme = useTheme()
   const router = useRouter()
@@ -79,6 +106,8 @@ const LoginPage = () => {
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
+
+  console.log(email, password)
 
   return (
     <Box className='content-center'>
@@ -159,12 +188,22 @@ const LoginPage = () => {
           </Box>
           <Box sx={{ mb: 6 }}>
             <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-              Welcome to {themeConfig.templateName}! 👋🏻
+              Welcome to {themeConfig.templateName}!
             </Typography>
-            <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
+            <Typography variant='body2'>Please sign-in to your account </Typography>
           </Box>
-          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='email' label='Email' sx={{ marginBottom: 4 }} />
+          <form noValidate autoComplete='off'>
+            <TextField
+              autoFocus
+              fullWidth
+              id='email'
+              label='Email'
+              type='email'
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              sx={{ marginBottom: 4 }}
+            />
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
               <OutlinedInput
@@ -190,18 +229,11 @@ const LoginPage = () => {
             <Box
               sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
             >
-              <FormControlLabel control={<Checkbox />} label='Remember Me' />
-              <Link passHref href='/'>
-                <LinkStyled onClick={e => e.preventDefault()}>Forgot Password?</LinkStyled>
-              </Link>
+              {error ?   <Typography  sx={{color:"red" , margin:"10px 5px" }}>
+              * User Error
+            </Typography>: null}
             </Box>
-            <Button
-              fullWidth
-              size='large'
-              variant='contained'
-              sx={{ marginBottom: 7 }}
-              onClick={() => router.push('/')}
-            >
+            <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }} onClick={handleSubmit}>
               Login
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -213,31 +245,6 @@ const LoginPage = () => {
                   <LinkStyled>Create an account</LinkStyled>
                 </Link>
               </Typography>
-            </Box>
-            <Divider sx={{ my: 5 }}>or</Divider>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Facebook sx={{ color: '#497ce2' }} />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Twitter sx={{ color: '#1da1f2' }} />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Github
-                    sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : theme.palette.grey[300]) }}
-                  />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Google sx={{ color: '#db4437' }} />
-                </IconButton>
-              </Link>
             </Box>
           </form>
         </CardContent>
