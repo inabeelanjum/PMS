@@ -18,6 +18,11 @@ const navigation = () => {
       path: '/'
     },
     {
+      title: 'Customers',
+      icon: AccountCogOutline,
+      path: '/customers'
+    },
+    {
       title: 'Account Settings',
       icon: AccountCogOutline,
       path: '/account-settings'

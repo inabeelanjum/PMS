@@ -36,6 +36,16 @@ async function getOrders(){
     console.error(error)
   }
 }
+async function getCustomers(){
+  try {
+    const response = await instance.get('pms/customers/')
+
+    return response
+
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 const logout = () => {
   localStorage.removeItem('token')
@@ -50,5 +60,6 @@ export default {
   login,
   logout,
   getOrders,
-  getCurrentUser
+  getCurrentUser,
+  getCustomers
 }
