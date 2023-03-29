@@ -23,6 +23,11 @@ const navigation = () => {
       path: '/customers'
     },
     {
+      icon: CubeOutline,
+      title: 'Inventory',
+      path: '/inventory'
+    },
+    {
       title: 'Account Settings',
       icon: AccountCogOutline,
       path: '/account-settings'

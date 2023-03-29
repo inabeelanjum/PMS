@@ -46,6 +46,13 @@ async function getCustomers(){
     console.error(error)
   }
 }
+async function addCustomers(payload){
+    const response = await instance.post('pms/customers/' , payload)
+    
+    return response
+
+ 
+}
 
 const logout = () => {
   localStorage.removeItem('token')
@@ -61,5 +68,6 @@ export default {
   logout,
   getOrders,
   getCurrentUser,
-  getCustomers
+  getCustomers,
+  addCustomers
 }

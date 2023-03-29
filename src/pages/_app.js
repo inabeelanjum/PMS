@@ -7,6 +7,7 @@ import NProgress from 'nprogress'
 
 // ** Emotion Imports
 import { CacheProvider } from '@emotion/react'
+import toast, { Toaster } from 'react-hot-toast';
 
 // ** Config Imports
 import themeConfig from 'src/configs/themeConfig'
@@ -54,7 +55,7 @@ const App = props => {
       <Head>
         <title>{`${themeConfig.templateName} `}</title>
       </Head>
-
+      <Toaster/>
       <SettingsProvider>
         <SettingsConsumer>
           {({ settings }) => {
