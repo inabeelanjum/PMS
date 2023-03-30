@@ -15,9 +15,8 @@ import toast, { Toaster } from 'react-hot-toast'
 // ** Styled Component Import
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
-import StatisticsCard from 'src/views/dashboard/StatisticsCard'
 import UserService from 'src/services/UserService'
-import TableStickyHeader from 'src/views/tables/CustomerTable'
+import TableStickyHeader from 'src/views/tables/SearchProductTable'
 import Loader from 'src/utils/loader'
 
 const Dashboard = () => {
@@ -33,39 +32,25 @@ const Dashboard = () => {
 
   const searchCustomer = () => {
     setLoader(true)
-    UserService.searchCustomers(searchTerm)
+    UserService.searchProduct(searchTerm)
       .then(res => {
         if (res?.data.responseCode === 2000) {
-          toast.success('Customer Found')
+          toast.success('customer response')
           setOrders(res.data.data)
           setLoader(false)
+
+          console.log('customer found', res.data)
         }
       })
 
       .catch(err => {
         setLoader(false)
-
         toast.error(err.response?.data?.error)
       })
   }
-  useEffect(() => {
-    setLoader(true)
-    UserService.getCustomers()
-      .then(res => {
-        if (res.data.responseCode === 2000) {
-          setOrders(res.data.data)
-          setLoader(false)
-        }
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }, [])
 
-  const handleClick = e => {
-    e.preventDefault()
-    router.push('/customers/addCustomer')
-  }
+
+ 
   if (loader) {
     return <Loader />
   }
@@ -73,18 +58,16 @@ const Dashboard = () => {
   return (
     <ApexChartWrapper>
       <Grid container spacing={6} sx={{ justifyContent: 'right' }}>
-        <Button onClick={handleClick} variant='contained' sx={{ marginTop: '20px' }}>
-          Add Customer
-        </Button>
+      
         <Grid item xs={12}>
-          {orders.length ? (
+         
             <Card>
-              <CardHeader title='Customers' titleTypographyProps={{ variant: 'h6' }} />
+              <CardHeader title='Search Product' titleTypographyProps={{ variant: 'h6' }} />
               <Container maxWidth='md' sx={{ mb: 4, mt: 1, marginLeft: '5px' }}>
                 <TextField
                   id='search'
                   type='search'
-                  label='Search Customer by Email'
+                  label='Search Product by SKU'
                   size='small'
                   value={searchTerm}
                   onChange={handleSearch}
@@ -97,9 +80,11 @@ const Dashboard = () => {
                   Search
                 </Button>
               </Container>
+              {orders.length ? (
               <TableStickyHeader data={orders} />
+              ) : null}
             </Card>
-          ) : null}
+     
         </Grid>
       </Grid>
     </ApexChartWrapper>

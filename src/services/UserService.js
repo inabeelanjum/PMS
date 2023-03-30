@@ -69,6 +69,12 @@ async function searchCustomers(payload){
   return response
 
 }
+async function searchProduct(payload){
+  const response = await instance.get(`pms/products/search?product_sku=${payload}`)
+
+  return response
+
+}
 
 const logout = () => {
   localStorage.removeItem('token')
@@ -88,4 +94,5 @@ export default {
   addCustomers,
   searchCustomers,
   getNotifications,
+  searchProduct,
 }
