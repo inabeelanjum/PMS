@@ -46,12 +46,28 @@ async function getCustomers(){
     console.error(error)
   }
 }
+async function getNotifications(){
+  try {
+    const response = await instance.get('pms/products/notifications')
+
+    return response
+
+  } catch (error) {
+    console.error(error)
+  }
+}
 async function addCustomers(payload){
     const response = await instance.post('pms/customers/' , payload)
     
     return response
 
  
+}
+async function searchCustomers(payload){
+  const response = await instance.get(`pms/customers/find?email=${payload}`)
+
+  return response
+
 }
 
 const logout = () => {
@@ -69,5 +85,7 @@ export default {
   getOrders,
   getCurrentUser,
   getCustomers,
-  addCustomers
+  addCustomers,
+  searchCustomers,
+  getNotifications,
 }
