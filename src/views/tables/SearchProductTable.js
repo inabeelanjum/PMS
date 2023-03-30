@@ -14,7 +14,7 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 
-import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material'
+const img_url = 'http://115.186.185.234:9010/public/'
 
 const columns = [
   { id: 'url', label: 'Image' },
@@ -50,15 +50,15 @@ const TableStickyHeader = ({ data }) => {
   const handleClose = () => {
     setOpen(false)
   }
-  function createData(product_id, product_name, product_sku, product_quantity, address, product_unit_price) {
-    return { product_id, product_name, product_sku, product_quantity, address, product_unit_price }
+  function createData(url,product_id, product_name, product_sku, product_quantity, product_unit_price ,address ) {
+    return {url, product_id, product_name, product_sku, product_quantity,  product_unit_price, address }
   }
 
   const rows = []
 
   data?.forEach(item => {
-    const { product_id, product_name, product_sku, product_quantity, product_unit_price, address } = item
-    rows.push(createData(product_id, product_name, product_sku, product_quantity, address, product_unit_price ))
+    const { url,product_id, product_name, product_sku, product_quantity, product_unit_price, address } = item
+    rows.push(createData( url , product_id, product_name, product_sku, product_quantity, product_unit_price , address ))
   })
 
   // ** States
@@ -98,9 +98,14 @@ const TableStickyHeader = ({ data }) => {
                       const value = row[column.id]
                       if (column.id === 'url') {
                         return (
-                          <TableCell key={column.id} align={column.align}>
-                            <img src={`${column.url}`} alt="image" width="80" height="80"></img>
-                          </TableCell>
+                          <>
+                          {value ? <TableCell key={column.id} align={column.align}>
+                            <img src={`${img_url + value}`} alt="image" width="80" height="80"></img>
+                          </TableCell>: <TableCell key={column.id} align={column.align}>
+                            <img src='/images/dummy.png' alt="image" width="80" height="80"></img>
+                          </TableCell>}
+                          
+                          </>
                         )
                       } else {
                         return (

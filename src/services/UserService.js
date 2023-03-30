@@ -46,6 +46,16 @@ async function getCustomers(){
     console.error(error)
   }
 }
+async function getInventory(){
+  try {
+    const response = await instance.get('pms/products')
+
+    return response
+
+  } catch (error) {
+    console.error(error)
+  }
+}
 async function getNotifications(){
   try {
     const response = await instance.get('pms/products/notifications')
@@ -62,6 +72,13 @@ async function addCustomers(payload){
     return response
 
  
+}
+async function addProduct(payload){
+  const response = await instance.post('pms/products/' , payload)
+  
+  return response
+
+
 }
 async function searchCustomers(payload){
   const response = await instance.get(`pms/customers/find?email=${payload}`)
@@ -95,4 +112,6 @@ export default {
   searchCustomers,
   getNotifications,
   searchProduct,
+  getInventory,
+  addProduct,
 }

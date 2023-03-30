@@ -14,25 +14,25 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 
-import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material'
+const img_url = 'http://115.186.185.234:9010/public/'
 
 const columns = [
-  { id: 'image', label: 'Image' },
-  { id: 'customer_id', label: 'ID' },
-  { id: 'first_name', label: 'Name' },
+  { id: 'url', label: 'Image' },
+  { id: 'product_id', label: 'ID' },
+  { id: 'product_name', label: 'Name' },
   {
-    id: 'email',
-    label: 'Email'
+    id: 'product_sku',
+    label: 'Product SKU'
   },
   {
-    id: 'dob',
-    label: 'DOB'
+    id: 'created_at',
+    label: 'Created On'
   },
   {
-    id: 'city',
-    label: 'City'
+    id: 'product_quantity',
+    label: 'Quantity'
   },
-  { id: 'address', label: 'Address' }
+  { id: 'product_unit_price', label: 'Unit Price' }
 ]
 
 const TableStickyHeader = ({ data }) => {
@@ -41,8 +41,8 @@ const TableStickyHeader = ({ data }) => {
   const [orderDetails, setOrderDetails] = useState(null)
 
   const handleOpen = id => {
-    const foundObject = data?.orders?.find(obj => obj.order_id === id)
-    setOrderDetails(foundObject.order_items)
+    const founcreated_atject = data?.orders?.find(obj => obj.order_id === id)
+    setOrderDetails(founcreated_atject.order_items)
     setRow(row)
     setOpen(true)
   }
@@ -50,16 +50,18 @@ const TableStickyHeader = ({ data }) => {
   const handleClose = () => {
     setOpen(false)
   }
-  function createData(customer_id, first_name, email, city, address, dob) {
-    return { customer_id, first_name, email, city, address, dob }
+  function createData(url,product_id, product_name, product_sku, product_quantity, product_unit_price, created_at) {
+    return { url ,product_id, product_name, product_sku, product_quantity, product_unit_price, created_at }
   }
 
   const rows = []
 
   data?.forEach(item => {
-    const { customer_id, first_name, email, city, dob, address } = item
-    rows.push(createData(customer_id, first_name, email, city, address, moment(dob).format('MMMM Do YYYY')))
+    console.log('item', item.url)
+    const { url, product_id, product_name, product_sku, product_quantity, created_at, product_unit_price } = item
+    rows.push(createData(url, product_id, product_name, product_sku, product_quantity, product_unit_price, moment(created_at).format('MMMM Do YYYY')))
   })
+
 
   // ** States
   const [page, setPage] = useState(0)
@@ -77,7 +79,7 @@ const TableStickyHeader = ({ data }) => {
   return (
     <>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 700 }}>
+        <TableContainer sx={{ maxHeight: 1000 }}>
           <Table stickyHeader aria-label='sticky table'>
             <TableHead>
               <TableRow>
@@ -96,11 +98,16 @@ const TableStickyHeader = ({ data }) => {
                   <TableRow hover role='checkbox' tabIndex={-1} key={row.code}>
                     {columns.map(column => {
                       const value = row[column.id]
-                      if (column.id === 'image') {
+                      if (column.id === 'url') {
                         return (
-                          <TableCell key={column.id} align={column.align}>
-                            <img src="/images/avatars/1.png" alt="image" width="80" height="80"></img>
-                          </TableCell>
+                          <>
+                          {value ? <TableCell key={column.id} align={column.align}>
+                            <img src={`${img_url + value}`} alt="image" width="80" height="80"></img>
+                          </TableCell>: <TableCell key={column.id} align={column.align}>
+                            <img src='/images/dummy.png' alt="image" width="80" height="80"></img>
+                          </TableCell>}
+                          
+                          </>
                         )
                       } else {
                         return (

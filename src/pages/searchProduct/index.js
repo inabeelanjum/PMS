@@ -35,11 +35,9 @@ const Dashboard = () => {
     UserService.searchProduct(searchTerm)
       .then(res => {
         if (res?.data.responseCode === 2000) {
-          toast.success('customer response')
+          toast.success('Product Found')
           setOrders(res.data.data)
           setLoader(false)
-
-          console.log('customer found', res.data)
         }
       })
 
