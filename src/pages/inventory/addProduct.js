@@ -11,17 +11,17 @@ import Box from '@mui/material/Box'
 import { styled } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
 import CardHeader from '@mui/material/CardHeader'
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast'
 import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
 import Loader from 'src/utils/loader'
 import UserService from 'src/services/UserService'
 import Typography from '@mui/material/Typography'
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
+import Radio from '@mui/material/Radio'
+import RadioGroup from '@mui/material/RadioGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import FormControl from '@mui/material/FormControl'
+import FormLabel from '@mui/material/FormLabel'
 
 const ImgStyled = styled('img')(({ theme }) => ({
   width: 120,
@@ -51,11 +51,12 @@ const FormLayoutsSeparator = () => {
   const [loader, setLoader] = useState(false)
   const router = useRouter()
   const [imgSrc, setImgSrc] = useState('/images/dummy.png')
-  const [value, setValue] = React.useState(true);
-  
-  const handleChangeRadio = (event) => {
-    setValue(event.target.value);
-  };
+  const [value, setValue] = React.useState(true)
+  const [image, setImage] = useState(null)
+
+  const handleChangeRadio = event => {
+    setValue(event.target.value)
+  }
 
   const onChange = file => {
     const reader = new FileReader()
@@ -63,6 +64,7 @@ const FormLayoutsSeparator = () => {
     if (files && files.length !== 0) {
       reader.onload = () => setImgSrc(reader.result)
       reader.readAsDataURL(files[0])
+      setImage(files[0])
     }
   }
 
@@ -72,7 +74,7 @@ const FormLayoutsSeparator = () => {
     product_quantity: '',
     product_unit_price: '',
     product_age_limit: '',
-    product_description: '',
+    product_description: ''
   })
 
   const handleChange = event => {
@@ -80,17 +82,25 @@ const FormLayoutsSeparator = () => {
     setFormData(prevState => ({ ...prevState, [name]: value }))
   }
 
-  const handleSubmit = async (event)=> {
-    event.preventDefault();
-    formData.product_age_limit = Boolean(value);
-    const formDataPayload = new FormData();
-    formDataPayload.append('productImage' , imgSrc )
-    formDataPayload.append("data", JSON.stringify(formData));
+  const handleSubmit = async event => {
+    event.preventDefault()
+    formData.product_age_limit = Boolean(value)
+
+    const formDataPayload = new FormData()
+    formDataPayload.append('productImage', image)
+    formDataPayload.append('product_name', formData.product_name)
+    formDataPayload.append('product_sku', formData.product_sku)
+    formDataPayload.append('product_quantity', formData.product_quantity)
+    formDataPayload.append('product_unit_price', formData.product_unit_price)
+    formDataPayload.append('product_age_limit', formData.product_age_limit)
+    formDataPayload.append('product_description', formData.product_description)
+
+    console.log('form data', formData)
     setLoader(true)
-    UserService.addProduct(formData)
+    UserService.addProduct(formDataPayload)
       .then(res => {
         if (res?.data.responseCode === 2000) {
-            toast.success("customer Added Successfully")
+          toast.success('Product Added Successfully')
           setLoader(false)
           router.push('/inventory')
         }
@@ -99,7 +109,6 @@ const FormLayoutsSeparator = () => {
         setLoader(false)
         toast.error(err.response?.data?.error)
       })
-    console.log("form data" , formData)
   }
 
   if (loader) {
@@ -113,37 +122,30 @@ const FormLayoutsSeparator = () => {
       <Divider sx={{ margin: 0 }} />
       <form onSubmit={handleSubmit}>
         <CardContent>
-
-        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom:'20px' }}>
-              <ImgStyled src={imgSrc} alt='Product Pic' />
-              <Box>
-                <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
-                  Upload New Photo
-                  <input
-                    hidden
-                    type='file'
-                    onChange={onChange}
-                    accept='image/png, image/jpeg'
-                    id='account-settings-upload-image'
-                  />
-                </ButtonStyled>
-                <ResetButtonStyled color='error' variant='outlined' onClick={() => setImgSrc('/images/avatars/1.png')}>
-                  Reset
-                </ResetButtonStyled>
-                <Typography variant='body2' sx={{ marginTop: 5 }}>
-                  Allowed PNG or JPEG. Max size of 800K.
-                </Typography>
-              </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+            <ImgStyled src={imgSrc} alt='Product Pic' />
+            <Box>
+              <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
+                Upload New Photo
+                <input
+                  hidden
+                  type='file'
+                  onChange={onChange}
+                  accept='image/png, image/jpeg'
+                  id='account-settings-upload-image'
+                />
+              </ButtonStyled>
+              <ResetButtonStyled color='error' variant='outlined' onClick={() => setImgSrc('/images/dummy.png')}>
+                Reset
+              </ResetButtonStyled>
+              <Typography variant='body2' sx={{ marginTop: 5 }}>
+                Allowed PNG or JPEG. Max size of 5 MB.
+              </Typography>
             </Box>
-
-
+          </Box>
 
           <Grid container spacing={5}>
-
-         
-
             <Grid item xs={12} sm={6}>
-           
               <TextField
                 value={formData.product_name}
                 onChange={handleChange}
@@ -194,22 +196,20 @@ const FormLayoutsSeparator = () => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-            <FormControl>
-      <FormLabel id="demo-row-radio-buttons-group-label">Age Limit</FormLabel>
-      <RadioGroup
-        row
-        aria-labelledby="demo-row-radio-buttons-group-label"
-        name="row-radio-buttons-group"
-        value={value}
-        onChange={handleChangeRadio}
-      >
-        <FormControlLabel value={true} control={<Radio />} label="True" />
-        <FormControlLabel value={false} control={<Radio />} label="False" />
-      </RadioGroup>
-    </FormControl>
+              <FormControl>
+                <FormLabel id='demo-row-radio-buttons-group-label'>Age Limit</FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby='demo-row-radio-buttons-group-label'
+                  name='row-radio-buttons-group'
+                  value={value}
+                  onChange={handleChangeRadio}
+                >
+                  <FormControlLabel value={true} control={<Radio />} label='True' />
+                  <FormControlLabel value={false} control={<Radio />} label='False' />
+                </RadioGroup>
+              </FormControl>
             </Grid>
-           
-           
           </Grid>
         </CardContent>
         <Divider sx={{ margin: 0 }} />
