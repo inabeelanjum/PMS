@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 
+import { useRouter } from 'next/router'
+
 const moment = require('moment')
 
 // ** MUI Imports
@@ -13,6 +15,10 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
+import {
+  Button,
+
+} from '@mui/material'
 
 const img_url = 'http://115.186.185.234:9010/public/'
 
@@ -32,13 +38,15 @@ const columns = [
     id: 'product_quantity',
     label: 'Quantity'
   },
-  { id: 'product_unit_price', label: 'Unit Price' }
+  { id: 'product_unit_price', label: 'Unit Price' },
+  { id: 'view', label: 'Edit', minWidth: 100, },
 ]
 
 const TableStickyHeader = ({ data }) => {
   const [open, setOpen] = useState(false)
   const [row, setRow] = useState(null)
   const [orderDetails, setOrderDetails] = useState(null)
+  const router = useRouter()
 
   const handleOpen = id => {
     const founcreated_atject = data?.orders?.find(obj => obj.order_id === id)
@@ -76,10 +84,21 @@ const TableStickyHeader = ({ data }) => {
     setPage(0)
   }
 
+  const handleEdit = (id) => {
+   
+    const myObject = data.find(obj => obj.product_id === id);
+    const product = JSON.stringify(myObject)
+
+    router.push({
+      pathname: '/inventory/editProduct',
+      query: { data:product},
+    })
+  }
+
   return (
     <>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 1000 }}>
+        <TableContainer sx={{ maxHeight: 10000 }}>
           <Table stickyHeader aria-label='sticky table'>
             <TableHead>
               <TableRow>
@@ -109,7 +128,15 @@ const TableStickyHeader = ({ data }) => {
                           
                           </>
                         )
-                      } else {
+                      } else if (column.id === 'view') {
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            <Button variant="contained" sx={{color:"white !important" , fontSize:"12px" , padding:"10px"}} onClick={() => handleEdit(row.product_id)}>Edit</Button>
+                          </TableCell>
+                        )
+                      }
+                      
+                      else {
                         return (
                           <TableCell key={column.id} align={column.align}>
                             {column.format && typeof value === 'number' ? column.format(value) : value}
