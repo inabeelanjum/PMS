@@ -74,6 +74,7 @@ const FormLayoutsSeparator = () => {
   }
 
   const [formData, setFormData] = useState({
+    product_id:'',
     product_name: '',
     product_sku: '',
     product_quantity: '',
@@ -92,6 +93,7 @@ const FormLayoutsSeparator = () => {
       const editData = JSON.parse(data)
       setFormData(prevState => ({
         ...prevState,
+        product_id : editData.product_id,
         product_name: editData.product_name,
         product_sku: editData.product_sku,
         product_quantity: editData.product_quantity,
@@ -108,20 +110,22 @@ const FormLayoutsSeparator = () => {
     event.preventDefault()
     formData.product_age_limit = Boolean(value)
 
-    const formDataPayload = new FormData()
-    formDataPayload.append('productImage', image)
-    formDataPayload.append('product_name', formData.product_name)
-    formDataPayload.append('product_sku', formData.product_sku)
-    formDataPayload.append('product_quantity', formData.product_quantity)
-    formDataPayload.append('product_unit_price', formData.product_unit_price)
-    formDataPayload.append('product_age_limit', formData.product_age_limit)
-    formDataPayload.append('product_description', formData.product_description)
+    const formDataPayload = {
+      product_id:formData.product_id,
+      product_name: formData.product_name,
+      product_quantity: formData.product_quantity,
+      product_unit_price: formData.product_unit_price,
+      product_age_limit: formData.product_age_limit,
+      product_description: formData.product_description
+    }
+  
+  
 
     setLoader(true)
-    UserService.addProduct(formDataPayload)
+    UserService.updateProduct(formDataPayload)
       .then(res => {
         if (res?.data.responseCode === 2000) {
-          toast.success('Product Added Successfully')
+          toast.success('Product Updated Successfully')
           setLoader(false)
           router.push('/inventory')
         }
@@ -138,7 +142,7 @@ const FormLayoutsSeparator = () => {
 
   return (
     <Card>
-      <CardHeader title='Edit Product' titleTypographyProps={{ variant: 'h6' }} />
+      <CardHeader title='Update Product' titleTypographyProps={{ variant: 'h6' }} />
 
       <Divider sx={{ margin: 0 }} />
       <form onSubmit={handleSubmit}>

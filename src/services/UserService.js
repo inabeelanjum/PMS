@@ -80,6 +80,14 @@ async function addProduct(payload){
 
 
 }
+async function updateProduct(payload){
+  const response = await instance.put('pms/products/' , payload)
+  
+  return response
+
+
+}
+
 async function searchCustomers(payload){
   const response = await instance.get(`pms/customers/find?email=${payload}`)
 
@@ -114,4 +122,5 @@ export default {
   searchProduct,
   getInventory,
   addProduct,
+  updateProduct,
 }
