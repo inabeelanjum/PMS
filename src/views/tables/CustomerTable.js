@@ -4,6 +4,8 @@ import { useState } from 'react'
 
 const moment = require('moment')
 
+import { useRouter } from 'next/router'
+
 // ** MUI Imports
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
@@ -31,19 +33,29 @@ const columns = [
     id: 'city',
     label: 'City'
   },
-  { id: 'address', label: 'Address' }
+  { id: 'address', label: 'Address' },
+  { id: 'order', label: 'Order' }
 ]
 
 const TableStickyHeader = ({ data }) => {
   const [open, setOpen] = useState(false)
   const [row, setRow] = useState(null)
   const [orderDetails, setOrderDetails] = useState(null)
+  const router = useRouter()
 
   const handleOpen = id => {
     const foundObject = data?.orders?.find(obj => obj.order_id === id)
     setOrderDetails(foundObject.order_items)
     setRow(row)
     setOpen(true)
+  }
+
+  const handleOrder = id => {
+    router.push({
+      pathname: '/inventory/orderProduct',
+      query: { data:id},
+    })
+    
   }
 
   const handleClose = () => {
@@ -95,15 +107,15 @@ const TableStickyHeader = ({ data }) => {
                   <TableRow hover role='checkbox' tabIndex={-1} key={row.code}>
                     {columns.map(column => {
                       const value = row[column.id]
-                      if (column.id === 'view') {
+                      if (column.id === 'order') {
                         return (
                           <TableCell key={column.id} align={column.align}>
                             <Button
                               variant='contained'
                               sx={{ color: 'white !important', fontSize: '12px', padding: '10px' }}
-                              onClick={() => handleOpen(row.order_id)}
+                              onClick={() => handleOrder(row.customer_id)}
                             >
-                              view Items
+                              Place order
                             </Button>
                           </TableCell>
                         )

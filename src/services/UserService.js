@@ -100,6 +100,12 @@ async function searchProduct(payload){
   return response
 
 }
+async function placeOrder(payload){
+  const response = await instance.get('pms/orders' ,payload)
+
+  return response
+
+}
 
 const logout = () => {
   localStorage.removeItem('token')
@@ -123,4 +129,5 @@ export default {
   getInventory,
   addProduct,
   updateProduct,
+  placeOrder,
 }
