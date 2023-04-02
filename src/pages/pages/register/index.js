@@ -20,7 +20,8 @@ import { styled, useTheme } from '@mui/material/styles'
 import MuiCard from '@mui/material/Card'
 import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel from '@mui/material/FormControlLabel'
-
+import UserService from 'src/services/UserService'
+import toast, { Toaster } from 'react-hot-toast'
 // ** Icons Imports
 import Google from 'mdi-material-ui/Google'
 import Github from 'mdi-material-ui/Github'
@@ -61,9 +62,13 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 const RegisterPage = () => {
   // ** States
   const [values, setValues] = useState({
-    password: '',
-    showPassword: false
-  })
+    first_mame: "",
+    last_mame: "",
+    email: "",
+    password: "",
+    role_id: 2,
+  });
+
 
   // ** Hook
   const theme = useTheme()
@@ -79,6 +84,26 @@ const RegisterPage = () => {
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
+
+  const handleSubmit = (event) => {
+
+    event.preventDefault();
+
+    UserService.register(values)
+      .then(res => {
+        console.log("then")
+        if (res.data.responseCode === 2000) {
+          toast.success('Store Registered Successfully')
+          router.push('/pages/login')
+        }
+      })
+      .catch(err => {
+        console.log("err" , err)
+        toast.error(err.response?.data?.error)
+      })
+
+  };
+
 
   return (
     <Box className='content-center'>
@@ -159,13 +184,14 @@ const RegisterPage = () => {
           </Box>
           <Box sx={{ mb: 6 }}>
             <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-              Adventure starts here 🚀
+              signup
             </Typography>
-            <Typography variant='body2'>Make your app management easy and fun!</Typography>
+            <Typography variant='body2'></Typography>
           </Box>
-          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='username' label='Username' sx={{ marginBottom: 4 }} />
-            <TextField fullWidth type='email' label='Email' sx={{ marginBottom: 4 }} />
+          <form noValidate autoComplete='off' onSubmit={event => handleSubmit(event)}>
+            <TextField autoFocus fullWidth id='first_mame' label='First Name' sx={{ marginBottom: 4 }} onChange={handleChange('first_mame')} />
+            <TextField autoFocus fullWidth id='last_mame' label='Last Name' sx={{ marginBottom: 4 }} onChange={handleChange(('last_mame'))}/>
+            <TextField fullWidth type='email' label='Email' sx={{ marginBottom: 4 }} onChange={handleChange(('email'))}/>
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-register-password'>Password</InputLabel>
               <OutlinedInput
@@ -188,18 +214,8 @@ const RegisterPage = () => {
                 }
               />
             </FormControl>
-            <FormControlLabel
-              control={<Checkbox />}
-              label={
-                <Fragment>
-                  <span>I agree to </span>
-                  <Link href='/' passHref>
-                    <LinkStyled onClick={e => e.preventDefault()}>privacy policy & terms</LinkStyled>
-                  </Link>
-                </Fragment>
-              }
-            />
-            <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 }}>
+          
+            <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 , marginTop:7 }}>
               Sign up
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -212,31 +228,8 @@ const RegisterPage = () => {
                 </Link>
               </Typography>
             </Box>
-            <Divider sx={{ my: 5 }}>or</Divider>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Facebook sx={{ color: '#497ce2' }} />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Twitter sx={{ color: '#1da1f2' }} />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Github
-                    sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : theme.palette.grey[300]) }}
-                  />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Google sx={{ color: '#db4437' }} />
-                </IconButton>
-              </Link>
-            </Box>
+           
+           
           </form>
         </CardContent>
       </Card>
