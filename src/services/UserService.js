@@ -99,6 +99,12 @@ async function searchProduct(payload){
   return response
 
 }
+async function getOrderByID(payload){
+  const response = await instance.get(`pms/orders/customers?customer_id=${payload}`)
+
+  return response
+
+}
 async function placeOrder(payload){
   const response = await instance.post('pms/orders' ,payload)
 
@@ -129,4 +135,5 @@ export default {
   addProduct,
   updateProduct,
   placeOrder,
+  getOrderByID,
 }

@@ -178,22 +178,24 @@ const TableStickyHeader = ({ data  , setPlaceOrder}) => {
                                 display: 'flex',
                                 flexDirection: 'column',
                                 justifyContent: 'center',
-                                justifyItems: 'center'
+                                justifyItems: 'center',
+                                marginTop:"15px"
                               }}
                             >
                               <Button
                                 variant='contained'
-                                sx={{ color: 'white !important', fontSize: '12px', padding: '10px' }}
+                                sx={{ color: 'white !important', fontSize: '8px', padding: '5px' }}
                                 onClick={() => handleAdd(row.product_id)}
                               >
                                 +
                               </Button>
-                              <Typography sx={{ textAlign: 'center' }}>{row.count}</Typography>
+                              <Typography  sx={{ textAlign: 'center' ,  }} >{row.count}</Typography>
 
                               <Button
+                               disabled={row.count < 1}
                                 variant='contained'
-                                sx={{ color: 'white !important', fontSize: '12px', padding: '10px' }}
-                                onClick={() => handleRemove(row.product_id)}
+                                sx={{ color: 'white !important', fontSize: '8px', padding: '5px' , background:"red"}}
+                                onClick={() => handleRemove(row.product_id)} 
                               >
                                 -
                               </Button>

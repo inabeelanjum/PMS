@@ -17,6 +17,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 
 import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material'
+import UserService from 'src/services/UserService'
 
 const columns = [
   { id: 'customer_id', label: 'ID' },
@@ -34,7 +35,9 @@ const columns = [
     label: 'City'
   },
   { id: 'address', label: 'Address' },
-  { id: 'order', label: 'Order' }
+  { id: 'order', label: 'Order' },
+  { id: 'view', label: 'View', minWidth: 100, align: 'right' },
+
 ]
 
 const TableStickyHeader = ({ data }) => {
@@ -42,13 +45,6 @@ const TableStickyHeader = ({ data }) => {
   const [row, setRow] = useState(null)
   const [orderDetails, setOrderDetails] = useState(null)
   const router = useRouter()
-
-  const handleOpen = id => {
-    const foundObject = data?.orders?.find(obj => obj.order_id === id)
-    setOrderDetails(foundObject.order_items)
-    setRow(row)
-    setOpen(true)
-  }
 
   const handleOrder = id => {
     router.push({
@@ -78,6 +74,20 @@ const TableStickyHeader = ({ data }) => {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
+  }
+
+  const handleOpen = (id) => {
+
+    UserService.getOrderByID(id)
+    .then((res)=>{
+      console.log(res.data.data)
+      setOrderDetails(res.data.data)
+    }).catch((err)=> {
+console.log(err)
+    })
+    
+    setRow(row)
+    setOpen(true)
   }
 
   const handleChangeRowsPerPage = event => {
@@ -112,14 +122,20 @@ const TableStickyHeader = ({ data }) => {
                           <TableCell key={column.id} align={column.align}>
                             <Button
                               variant='contained'
-                              sx={{ color: 'white !important', fontSize: '12px', padding: '10px' }}
+                              sx={{ color: 'white !important', fontSize: '8px', padding: '10px' }}
                               onClick={() => handleOrder(row.customer_id)}
                             >
                               Place order
                             </Button>
                           </TableCell>
                         )
-                      } else {
+                      } else if (column.id === 'view') {
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            <Button variant="contained" sx={{color:"white !important" , fontSize:"8px" , padding:"10px" , background:"#00aeff"}} onClick={() => handleOpen(row.customer_id)}>view orders</Button>
+                          </TableCell>
+                        )
+                      }else {
                         return (
                           <TableCell key={column.id} align={column.align}>
                             {column.format && typeof value === 'number' ? column.format(value) : value}
@@ -142,25 +158,27 @@ const TableStickyHeader = ({ data }) => {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Paper>
+      </Paper >
       <Dialog open={open} onClose={handleClose}>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 500 }} aria-label='simple table'>
+        <TableContainer component={Paper} sx={{ width: '100%', overflow: 'hidden' }}>
+          <Table sx={{ minWidth: 200 , minHeight:500 }} aria-label='simple table'>
             <TableHead>
               <TableRow>
                 <TableCell align='left'>ID</TableCell>
                 <TableCell align='left'>Name</TableCell>
-                <TableCell align='left'>Unit Price</TableCell>
-                <TableCell align='left'>Quantity</TableCell>
+
+                <TableCell align='left'>Order Date</TableCell>
+                <TableCell align='left'>Charges</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {orderDetails?.map(row => (
-                <TableRow key={row.product_id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell align='left'>{row.product_id}</TableCell>
-                  <TableCell align='left'>{row.product_name}</TableCell>
-                  <TableCell align='left'>{row.product_unit_price}</TableCell>
-                  <TableCell align='left'>{row.product_quaunity}</TableCell>
+                <TableRow key={row.order_id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell align='left'>{row.order_id}</TableCell>
+                  <TableCell align='left'>{row.first_name}</TableCell>
+                  <TableCell align='left'>{ moment(row.created_at).format('MMMM Do YYYY') }</TableCell>
+                  <TableCell align='left'>{row.charges}</TableCell>
+           
                 </TableRow>
               ))}
             </TableBody>
