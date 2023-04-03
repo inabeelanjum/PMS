@@ -98,7 +98,7 @@ async function searchProduct(payload){
 
 }
 async function placeOrder(payload){
-  const response = await instance.get('pms/orders' ,payload)
+  const response = await instance.post('pms/orders' ,payload)
 
   return response
 

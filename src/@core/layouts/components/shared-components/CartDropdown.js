@@ -119,17 +119,17 @@ const NotificationDropdown = ({ placeOrder, data }) => {
         return { product_id, quantity }
       })
     ]
-    
+
     const payload = {
-      customer_id: data,
-      charges: totalPrice,
+      customer_id: +data,
+      charges: totalPrice.toString(),
       products: newArray
     }
     UserService.placeOrder(payload)
       .then(res => {
         if (res.data.responseCode === 2000) {
           toast.success('Order Placed Successfully')
-          router.push('/customers')
+          router.push('/')
         }
       })
       .catch(err => {
