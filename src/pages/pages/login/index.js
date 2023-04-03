@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import UserService from '../../../services/UserService.js'
+import toast, { Toaster } from 'react-hot-toast'
 
 // ** MUI Components
 import Box from '@mui/material/Box'
@@ -80,14 +81,20 @@ const LoginPage = () => {
 
     UserService.login(payload)
       .then((data) => {
-        if(data.responseCode === 2000)
-        console.log(data)
+        if(data?.responseCode === 2000){
         router.push('/')
-        // window.location.reload()
+        
+        }
+        else{
+        
+          toast.error("User Not Found")
+        }
       })
       .catch(error => {
+       
         setError(true)
         setLoading(false)
+        toast.error(error.response?.error)
       })
   }
 
@@ -229,9 +236,7 @@ const LoginPage = () => {
             <Box
               sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
             >
-              {error ?   <Typography  sx={{color:"red" , margin:"10px 5px" }}>
-              * User Error
-            </Typography>: null}
+             
             </Box>
             <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }} onClick={handleSubmit}>
               Login

@@ -22,6 +22,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel from '@mui/material/FormControlLabel'
 import UserService from 'src/services/UserService'
 import toast, { Toaster } from 'react-hot-toast'
+import { useRouter } from 'next/router'
 // ** Icons Imports
 import Google from 'mdi-material-ui/Google'
 import Github from 'mdi-material-ui/Github'
@@ -66,9 +67,11 @@ const RegisterPage = () => {
     last_mame: "",
     email: "",
     password: "",
+    city:'',
+    address:'',
     role_id: 2,
   });
-
+const router = useRouter()
 
   // ** Hook
   const theme = useTheme()
@@ -91,8 +94,8 @@ const RegisterPage = () => {
 
     UserService.register(values)
       .then(res => {
-        console.log("then")
-        if (res.data.responseCode === 2000) {
+        console.log("then" , res.responseCode)
+        if (res.responseCode === 2000) {
           toast.success('Store Registered Successfully')
           router.push('/pages/login')
         }
@@ -192,6 +195,9 @@ const RegisterPage = () => {
             <TextField autoFocus fullWidth id='first_mame' label='First Name' sx={{ marginBottom: 4 }} onChange={handleChange('first_mame')} />
             <TextField autoFocus fullWidth id='last_mame' label='Last Name' sx={{ marginBottom: 4 }} onChange={handleChange(('last_mame'))}/>
             <TextField fullWidth type='email' label='Email' sx={{ marginBottom: 4 }} onChange={handleChange(('email'))}/>
+            <TextField fullWidth  label='City' sx={{ marginBottom: 4 }} onChange={handleChange(('city'))}/>
+            <TextField fullWidth  label='Address' sx={{ marginBottom: 4 }} onChange={handleChange(('address'))}/>
+            
             <FormControl fullWidth>
               <InputLabel htmlFor='auth-register-password'>Password</InputLabel>
               <OutlinedInput
@@ -202,14 +208,14 @@ const RegisterPage = () => {
                 type={values.showPassword ? 'text' : 'password'}
                 endAdornment={
                   <InputAdornment position='end'>
-                    <IconButton
+                    {/* <IconButton
                       edge='end'
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                       aria-label='toggle password visibility'
                     >
                       {values.showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
-                    </IconButton>
+                    </IconButton> */}
                   </InputAdornment>
                 }
               />

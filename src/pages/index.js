@@ -26,10 +26,11 @@ const Dashboard = () => {
 
 
   useEffect(() => {
+   
     setLoader(true)
     UserService.getOrders()
-   
     .then((res) => {
+      console.log("res",res)
       if(res.data.responseCode === 2000){
         setOrders(res.data.data)
         setLoader(false)

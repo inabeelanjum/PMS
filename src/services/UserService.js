@@ -4,11 +4,13 @@ import instance from './instance'
 const API_URL = 'http://115.186.185.234:9010'
 
 const register = async payload => {
-  
+  try {
     const response = await axios.post(API_URL + '/pms/users/register', payload)
-    const data = response.data
 
-    return data
+    return response
+  } catch (error) {
+    console.error(error)
+  }
 }
 async function login(payload) {
   try {
