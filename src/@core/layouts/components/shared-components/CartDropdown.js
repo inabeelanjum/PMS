@@ -148,7 +148,7 @@ const NotificationDropdown = ({ placeOrder, data }) => {
     }
   }, [placeOrder])
 
-  console.log('data', totalPrice)
+  console.log('data', dataofOrder)
 
   return (
     <Fragment>
@@ -188,7 +188,7 @@ const NotificationDropdown = ({ placeOrder, data }) => {
                           <MenuItemSubtitle variant='body2'>Quantity : {item.count}</MenuItemSubtitle>
                         </Box>
                         <Typography variant='caption' sx={{ color: 'text.disabled' }}>
-                          Today
+                          price : {item.product_unit_price}
                         </Typography>
                       </Box>
                     </MenuItem>
