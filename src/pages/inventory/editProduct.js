@@ -58,7 +58,7 @@ const FormLayoutsSeparator = () => {
   const [value, setValue] = React.useState(true)
   const [image, setImage] = useState(null)
   const { data } = router.query
-
+  const [quantity, setQuantity] = useState(null)
   const handleChangeRadio = event => {
     setValue(event.target.value)
   }
@@ -74,7 +74,7 @@ const FormLayoutsSeparator = () => {
   }
 
   const [formData, setFormData] = useState({
-    product_id:'',
+    product_id: '',
     product_name: '',
     product_sku: '',
     product_quantity: '',
@@ -93,7 +93,7 @@ const FormLayoutsSeparator = () => {
       const editData = JSON.parse(data)
       setFormData(prevState => ({
         ...prevState,
-        product_id : editData.product_id,
+        product_id: editData.product_id,
         product_name: editData.product_name,
         product_sku: editData.product_sku,
         product_quantity: editData.product_quantity,
@@ -102,38 +102,41 @@ const FormLayoutsSeparator = () => {
         product_description: editData.product_description
       }))
       setImgSrc(img_url + editData.url)
+      setQuantity(editData.product_quantity)
       setValue(editData.product_age_limit)
     }
   }, [data])
 
   const handleSubmit = async event => {
     event.preventDefault()
-    formData.product_age_limit = Boolean(value)
 
-    const formDataPayload = {
-      product_id:formData.product_id,
-      product_name: formData.product_name,
-      product_quantity: formData.product_quantity,
-      product_unit_price: formData.product_unit_price,
-      product_age_limit: formData.product_age_limit,
-      product_description: formData.product_description
-    }
-  
-  
-
-    setLoader(true)
-    UserService.updateProduct(formDataPayload)
-      .then(res => {
-        if (res?.data.responseCode === 2000) {
-          toast.success('Product Updated Successfully')
+    if (quantity > Number(formData.product_quantity)) {
+      console.log('product quantity cannot be low than previous quantity')
+      toast.error('Product quantity cannot be low than previous Quantity')
+    } else {
+      formData.product_age_limit = Boolean(value)
+      const formDataPayload = {
+        product_id: formData.product_id,
+        product_name: formData.product_name,
+        product_quantity: formData.product_quantity,
+        product_unit_price: formData.product_unit_price,
+        product_age_limit: formData.product_age_limit,
+        product_description: formData.product_description
+      }
+      setLoader(true)
+      UserService.updateProduct(formDataPayload)
+        .then(res => {
+          if (res?.data.responseCode === 2000) {
+            toast.success('Product Updated Successfully')
+            setLoader(false)
+            router.push('/inventory')
+          }
+        })
+        .catch(err => {
           setLoader(false)
-          router.push('/inventory')
-        }
-      })
-      .catch(err => {
-        setLoader(false)
-        toast.error(err.response?.data?.error)
-      })
+          toast.error(err.response?.data?.error)
+        })
+    }
   }
 
   if (loader) {
