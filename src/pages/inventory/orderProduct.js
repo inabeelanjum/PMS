@@ -48,7 +48,7 @@ const { data }  = router.query
           {orders.length ? (
             <Card>
               <CardHeader title='Products' titleTypographyProps={{ variant: 'h6' }} />
-              <TableStickyHeader data={orders}  setPlaceOrder ={setPlaceOrder}/>
+              <TableStickyHeader data={orders}  setPlaceOrder ={setPlaceOrder} age={data}/>
             </Card>
           ) : null}
         </Grid>

@@ -48,10 +48,38 @@ const TableStickyHeader = ({ data }) => {
 
   const handleOrder = id => {
     console.log(id)
-    // router.push({
-    //   pathname: '/inventory/orderProduct',
-    //   query: { data:id},
-    // })
+    const cAge = id.dob;
+ const getAge = true ; 
+const dateString = cAge;
+
+
+const [monthString, dayString, yearString] = dateString.split(' ');
+
+
+const year = parseInt(yearString);
+
+
+const currentYear = new Date().getFullYear();
+
+
+const age = currentYear - year;
+
+
+if (age >= 18) {
+  getAge = false;
+} else {
+  getAge = true;
+}
+
+const data = {
+  id : id.customer_id,
+  age : getAge
+}
+const allData = JSON.stringify(data);
+    router.push({
+      pathname: '/inventory/orderProduct',
+      query: { data: allData},
+    })
     
   }
 

@@ -1,6 +1,6 @@
 // ** React Imports
 
-import { useState , useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -16,6 +16,8 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 import { Button, Typography } from '@mui/material'
+import { ControllerClassicOutline } from 'mdi-material-ui'
+import { toast } from 'react-hot-toast'
 
 const img_url = 'http://115.186.185.234:9010/public/'
 
@@ -36,34 +38,39 @@ const columns = [
     label: 'Quantity'
   },
   { id: 'product_unit_price', label: 'Unit Price' },
-  { id: 'view', label: 'order', minWidth: 100 },
-  
-
-
-  
+  { id: 'view', label: 'order', minWidth: 100 }
 ]
 
-const TableStickyHeader = ({ data  , setPlaceOrder}) => {
-  const [open, setOpen] = useState(false);
-  const [row, setRow] = useState(null);
-  const [orderDetails, setOrderDetails] = useState(null);
-  const router = useRouter();
-  const [orders , setOrders] = useState([]);
+const TableStickyHeader = ({ data, setPlaceOrder, age }) => {
+  const [open, setOpen] = useState(false)
+  const [row, setRow] = useState(null)
+  const [orderDetails, setOrderDetails] = useState(null)
+  const router = useRouter()
+  const [orders, setOrders] = useState([])
+  const [theAge, setTheAge] = useState(undefined)
 
   const handleClose = () => {
-    setOpen(false);
-  };
-
-  function createData(url, product_id, product_name, product_sku, product_quantity,created_at, product_unit_price,count) {
-    return { url, product_id, product_name, product_sku, product_quantity,created_at, product_unit_price,count}
+    setOpen(false)
   }
 
-  const rows = [];
+  function createData(
+    url,
+    product_id,
+    product_name,
+    product_sku,
+    product_quantity,
+    created_at,
+    product_unit_price,
+    count
+  ) {
+    return { url, product_id, product_name, product_sku, product_quantity, created_at, product_unit_price, count }
+  }
+
+  const rows = []
 
   orders?.forEach(item => {
-  
-    const { url, product_id, product_name, product_sku, product_quantity, created_at, product_unit_price , count } = item;
-   
+    const { url, product_id, product_name, product_sku, product_quantity, created_at, product_unit_price, count } = item
+
     rows.push(
       createData(
         url,
@@ -73,65 +80,79 @@ const TableStickyHeader = ({ data  , setPlaceOrder}) => {
         moment(created_at).format('MMMM Do YYYY'),
         product_quantity,
         product_unit_price,
-        count, 
+        count
       )
-    );
-  });
+    )
+  })
 
   // ** States
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+    setPage(newPage)
+  }
 
   const handleChangeRowsPerPage = event => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
- 
+    setRowsPerPage(+event.target.value)
+    setPage(0)
+  }
+
   const handleAdd = id => {
-    const updatedItems = orders.map(item => {
+    const hereIsAge = false
+    const checkage = orders.map(item => {
       if (item.product_id === id) {
-        const updatedItem = { ...item, count: item.count + 1 };
-        console.log(updatedItem);
-        return updatedItem;
-      } else {
-        return item;
+        hereIsAge = item.product_age_limit
       }
-    });
-    console.log(updatedItems);
-    setOrders(updatedItems);
-    setPlaceOrder(updatedItems)
-  };
+    })
+
+    if (hereIsAge && theAge.age) {
+      toast.error('Age Limit : customer is below 18')
+    } else {
+      const updatedItems = orders.map(item => {
+        if (item.product_id === id) {
+          const updatedItem = { ...item, count: item.count + 1 }
+          return updatedItem
+        } else {
+          return item
+        }
+      })
+      console.log('here is item:', updatedItems)
+
+      setOrders(updatedItems)
+      setPlaceOrder(updatedItems)
+    }
+  }
 
   const handleRemove = id => {
     const updatedItems = orders.map(item => {
       if (item.product_id === id) {
-        const updatedItem = { ...item, count: item.count - 1 };
-        console.log(updatedItem);
-        return updatedItem;
+        const updatedItem = { ...item, count: item.count - 1 }
+        console.log(updatedItem)
+        return updatedItem
       } else {
-        return item;
+        return item
       }
-    });
-    console.log(updatedItems);
-    setOrders(updatedItems);
+    })
+    console.log(updatedItems)
+    setOrders(updatedItems)
     setPlaceOrder(updatedItems)
-
-  };
+  }
 
   useEffect(() => {
-    console.log("useeffect triggered")
+    console.log('useeffect triggered')
     if (data) {
-      data.map((item) => {
-        item.count =0 ;
+      data.map(item => {
+        item.count = 0
       })
-      setOrders(data);
+      setOrders(data)
     }
-  }, [data]);
+    if (age) {
+      setTheAge(JSON.parse(age))
+    }
+  }, [data, age])
 
+  console.log(theAge)
   return (
     <>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -179,7 +200,7 @@ const TableStickyHeader = ({ data  , setPlaceOrder}) => {
                                 flexDirection: 'column',
                                 justifyContent: 'center',
                                 justifyItems: 'center',
-                                marginTop:"15px"
+                                marginTop: '15px'
                               }}
                             >
                               <Button
@@ -189,13 +210,13 @@ const TableStickyHeader = ({ data  , setPlaceOrder}) => {
                               >
                                 +
                               </Button>
-                              <Typography  sx={{ textAlign: 'center' ,  }} >{row.count}</Typography>
+                              <Typography sx={{ textAlign: 'center' }}>{row.count}</Typography>
 
                               <Button
-                               disabled={row.count < 1}
+                                disabled={row.count < 1}
                                 variant='contained'
-                                sx={{ color: 'white !important', fontSize: '8px', padding: '5px' , background:"red"}}
-                                onClick={() => handleRemove(row.product_id)} 
+                                sx={{ color: 'white !important', fontSize: '8px', padding: '5px', background: 'red' }}
+                                onClick={() => handleRemove(row.product_id)}
                               >
                                 -
                               </Button>

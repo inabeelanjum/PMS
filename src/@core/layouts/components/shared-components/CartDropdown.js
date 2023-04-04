@@ -22,6 +22,7 @@ import Cart from 'mdi-material-ui/Cart'
 import PerfectScrollbarComponent from 'react-perfect-scrollbar'
 import { useEffect } from 'react'
 import router from 'next/router'
+import { json } from 'react-router-dom'
 
 // ** Styled Menu component
 const Menu = styled(MuiMenu)(({ theme }) => ({
@@ -88,6 +89,7 @@ const NotificationDropdown = ({ placeOrder, data }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [dataofOrder, setDataOfOrder] = useState([])
   const [totalPrice, setTotalPrice] = useState(0)
+  const [theData , setTheData] = useState(undefined)
 
   // ** Hook
   const hidden = useMediaQuery(theme => theme.breakpoints.down('lg'))
@@ -121,7 +123,7 @@ const NotificationDropdown = ({ placeOrder, data }) => {
     ]
 
     const payload = {
-      customer_id: +data,
+      customer_id: +theData.id,
       charges: totalPrice.toString(),
       products: newArray
     }
@@ -146,7 +148,12 @@ const NotificationDropdown = ({ placeOrder, data }) => {
 
       setDataOfOrder(myArray)
     }
-  }, [placeOrder])
+
+    if(data)
+    {
+      setTheData(JSON.parse(data))
+    }
+  }, [placeOrder, data])
 
   console.log('data', dataofOrder)
 
