@@ -18,19 +18,26 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 import StatisticsCard from 'src/views/dashboard/StatisticsCard'
 import UserService from 'src/services/UserService'
 import TableStickyHeader from 'src/views/tables/TableStickyHeader'
-
+import { useRouter } from 'next/router';
 
 const Dashboard = () => {
   const [orders , setOrders] = useState('')
   const [loader, setLoader] = useState(false)
+  const router = useRouter();
+
 
 
   useEffect(() => {
+ 
+   
    
     setLoader(true)
     UserService.getOrders()
     .then((res) => {
       console.log("res",res)
+      if(res === undefined){
+        router.reload();
+      }
       if(res.data.responseCode === 2000){
         setOrders(res.data.data)
         setLoader(false)
@@ -40,7 +47,7 @@ const Dashboard = () => {
       console.log(err)
     })
   },[])
-console.log(orders)
+
 
 if (loader) {
   return <Loader />
