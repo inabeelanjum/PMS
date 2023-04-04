@@ -21,21 +21,21 @@ import {
 } from '@mui/material'
 
 const columns = [
-  { id: 'order_id', label: 'Order ID', minWidth: 170 },
-  { id: 'first_name', label: 'Name', minWidth: 100 },
+  { id: 'order_id', label: 'Order ID', minWidth: 10 , align: 'center'},
+  { id: 'first_name', label: 'Name', minWidth: 100 , align: 'center'},
   {
     id: 'charges',
     label: 'charges',
     minWidth: 170,
-    align: 'right'
+    align: 'center'
   },
   {
     id: 'created_at',
     label: 'Date',
     minWidth: 170,
-    align: 'right'
+    align: 'center'
   },
-  { id: 'view', label: 'View', minWidth: 100, align: 'right' },
+  { id: 'view', label: 'View', minWidth: 100, align: 'center' },
 ]
 
 

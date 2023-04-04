@@ -47,10 +47,11 @@ const TableStickyHeader = ({ data }) => {
   const router = useRouter()
 
   const handleOrder = id => {
-    router.push({
-      pathname: '/inventory/orderProduct',
-      query: { data:id},
-    })
+    console.log(id)
+    // router.push({
+    //   pathname: '/inventory/orderProduct',
+    //   query: { data:id},
+    // })
     
   }
 
@@ -123,7 +124,7 @@ console.log(err)
                             <Button
                               variant='contained'
                               sx={{ color: 'white !important', fontSize: '8px', padding: '10px' }}
-                              onClick={() => handleOrder(row.customer_id)}
+                              onClick={() => handleOrder(row)}
                             >
                               Place order
                             </Button>
