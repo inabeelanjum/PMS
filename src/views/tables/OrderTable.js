@@ -37,6 +37,7 @@ const columns = [
     id: 'product_quantity',
     label: 'Quantity'
   },
+ 
   { id: 'product_unit_price', label: 'Unit Price' },
   { id: 'view', label: 'order', minWidth: 100 }
 ]
@@ -58,18 +59,18 @@ const TableStickyHeader = ({ data, setPlaceOrder, age }) => {
     product_id,
     product_name,
     product_sku,
-    product_quantity,
     created_at,
+    product_quantity,
     product_unit_price,
     count
   ) {
-    return { url, product_id, product_name, product_sku, product_quantity, created_at, product_unit_price, count }
+    return { url, product_id, product_name, product_sku, created_at, product_quantity,  product_unit_price, count }
   }
 
   const rows = []
 
   orders?.forEach(item => {
-    const { url, product_id, product_name, product_sku, product_quantity, created_at, product_unit_price, count } = item
+    const { url, product_id, product_name, product_sku, created_at ,product_quantity,  product_unit_price, count } = item
 
     rows.push(
       createData(
@@ -100,6 +101,7 @@ const TableStickyHeader = ({ data, setPlaceOrder, age }) => {
 
   const handleAdd = id => {
     const hereIsAge = false
+
     const checkage = orders.map(item => {
       if (item.product_id === id) {
         hereIsAge = item.product_age_limit
@@ -112,6 +114,7 @@ const TableStickyHeader = ({ data, setPlaceOrder, age }) => {
       const updatedItems = orders.map(item => {
         if (item.product_id === id) {
           const updatedItem = { ...item, count: item.count + 1 }
+          
           return updatedItem
         } else {
           return item
@@ -153,6 +156,7 @@ const TableStickyHeader = ({ data, setPlaceOrder, age }) => {
   }, [data, age])
 
   console.log(theAge)
+
   return (
     <>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -204,6 +208,7 @@ const TableStickyHeader = ({ data, setPlaceOrder, age }) => {
                               }}
                             >
                               <Button
+                               disabled={row.product_quantity < 1}
                                 variant='contained'
                                 sx={{ color: 'white !important', fontSize: '8px', padding: '5px' }}
                                 onClick={() => handleAdd(row.product_id)}

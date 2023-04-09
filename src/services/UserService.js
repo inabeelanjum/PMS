@@ -10,6 +10,8 @@ const register = async payload => {
     return response
   } catch (error) {
     console.error(error)
+    
+    return error
   }
 }
 async function login(payload) {

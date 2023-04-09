@@ -94,15 +94,19 @@ const router = useRouter()
 
     UserService.register(values)
       .then(res => {
-        console.log("then" , res.responseCode)
-        if (res.responseCode === 2000) {
+        if (res.data?.responseCode === 2000) {
           toast.success('Store Registered Successfully')
           router.push('/pages/login')
         }
+        else{
+          toast.error(res?.response?.data?.error)
+        }
+      
       })
       .catch(err => {
-        console.log("err" , err)
-        toast.error(err.response?.data?.error)
+        console.log("err >>>" , err)
+
+        // toast.error(err.response?.error)
       })
 
   };
