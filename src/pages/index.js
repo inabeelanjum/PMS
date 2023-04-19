@@ -28,15 +28,15 @@ const Dashboard = () => {
 
 
   useEffect(() => {
- 
-   
-   
     setLoader(true)
     UserService.getOrders()
     .then((res) => {
-      console.log("res",res)
-      if(res === undefined){
-        router.reload();
+     
+      if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          router.reload();
+        }
       }
       if(res.data.responseCode === 2000){
         setOrders(res.data.data)
