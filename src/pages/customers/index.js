@@ -52,13 +52,16 @@ const Dashboard = () => {
     setLoader(true)
     UserService.getCustomers()
       .then(res => {
+        console.log("ressssss >> " , res)
         if (res.data.responseCode === 2000) {
           setOrders(res.data.data)
           setLoader(false)
         }
+        
       })
       .catch(err => {
-        console.log(err)
+        console.log("err" ,err)
+        setLoader(false)
       })
   }, [])
 

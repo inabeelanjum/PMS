@@ -59,8 +59,10 @@ const FormLayoutsSeparator = () => {
   const [image, setImage] = useState(null)
   const { data } = router.query
   const [quantity, setQuantity] = useState(null)
+
   const handleChangeRadio = event => {
     setValue(event.target.value)
+    
   }
 
   const onChange = file => {
@@ -114,28 +116,34 @@ const FormLayoutsSeparator = () => {
       console.log('product quantity cannot be low than previous quantity')
       toast.error('Product quantity cannot be low than previous Quantity')
     } else {
+      console.log(value)
+      
+      console.log("hi 2",formData)
       formData.product_age_limit = Boolean(value)
+      console.log("hi",formData)
+
       const formDataPayload = {
         product_id: formData.product_id,
         product_name: formData.product_name,
         product_quantity: formData.product_quantity,
         product_unit_price: formData.product_unit_price,
-        product_age_limit: formData.product_age_limit,
+        product_age_limit: value == 'true' ? true : false,
         product_description: formData.product_description
       }
       setLoader(true)
-      UserService.updateProduct(formDataPayload)
-        .then(res => {
-          if (res?.data.responseCode === 2000) {
-            toast.success('Product Updated Successfully')
-            setLoader(false)
-            router.push('/inventory')
-          }
-        })
-        .catch(err => {
-          setLoader(false)
-          toast.error(err.response?.data?.error)
-        })
+      console.log(formDataPayload)
+      // UserService.updateProduct(formDataPayload)
+      //   .then(res => {
+      //     if (res?.data.responseCode === 2000) {
+      //       toast.success('Product Updated Successfully')
+      //       setLoader(false)
+      //       router.push('/inventory')
+      //     }
+      //   })
+      //   .catch(err => {
+      //     setLoader(false)
+      //     toast.error(err.response?.data?.error)
+      //   })
     }
   }
 

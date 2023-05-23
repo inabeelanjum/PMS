@@ -1,0 +1,31 @@
+{
+  "name": "pms",
+  "version": "1.0.0",
+  "description": "prescription management system",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index",
+    "start": "NODE_ENV=production node index",
+    "test": "jest"
+  },
+  "author": "abdullah abrar",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "helmet": "^6.0.1",
+    "http-errors": "^2.0.0",
+    "joi": "^17.9.1",
+    "jsonwebtoken": "^9.0.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^2.0.22",
+    "path": "^0.12.7",
+    "pg": "^8.10.0",
+    "pg-format": "^1.0.4",
+    "response-time": "^2.3.2"
+  }
+}

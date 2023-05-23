@@ -85,30 +85,30 @@ const FormLayoutsSeparator = () => {
   const handleSubmit = async event => {
     event.preventDefault()
     formData.product_age_limit = Boolean(value)
-
+console.log(value)
     const formDataPayload = new FormData()
     formDataPayload.append('productImage', image)
     formDataPayload.append('product_name', formData.product_name)
     formDataPayload.append('product_sku', formData.product_sku)
     formDataPayload.append('product_quantity', formData.product_quantity)
     formDataPayload.append('product_unit_price', formData.product_unit_price)
-    formDataPayload.append('product_age_limit', formData.product_age_limit)
+    formDataPayload.append('product_age_limit', value)
     formDataPayload.append('product_description', formData.product_description)
 
     console.log('form data', formData)
     setLoader(true)
-    UserService.addProduct(formDataPayload)
-      .then(res => {
-        if (res?.data.responseCode === 2000) {
-          toast.success('Product Added Successfully')
-          setLoader(false)
-          router.push('/inventory')
-        }
-      })
-      .catch(err => {
-        setLoader(false)
-        toast.error(err.response?.data?.error)
-      })
+    // UserService.addProduct(formDataPayload)
+    //   .then(res => {
+    //     if (res?.data.responseCode === 2000) {
+    //       toast.success('Product Added Successfully')
+    //       setLoader(false)
+    //       router.push('/inventory')
+    //     }
+    //   })
+    //   .catch(err => {
+    //     setLoader(false)
+    //     toast.error(err.response?.data?.error)
+    //   })
   }
 
   if (loader) {

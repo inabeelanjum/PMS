@@ -25,9 +25,12 @@ const Dashboard = () => {
   const [loader, setLoader] = useState(false)
   const router = useRouter();
 
-
-
+  const { reloaded }  = router.query
   useEffect(() => {
+
+    if(reloaded ==1){
+      router.reload();
+    }
     setLoader(true)
     UserService.getOrders()
     .then((res) => {
@@ -35,9 +38,13 @@ const Dashboard = () => {
       if (typeof window !== 'undefined') {
         const token = localStorage.getItem('token');
         if (!token) {
+          router.push('/pages/login');
+        }
+        else if(res === undefined){
           router.reload();
         }
       }
+      
       if(res.data.responseCode === 2000){
         setOrders(res.data.data)
         setLoader(false)
@@ -45,13 +52,16 @@ const Dashboard = () => {
     })
     .catch((err) => {
       console.log(err)
+     
     })
+    
   },[])
 
-
+    console.log("reloaded" ,reloaded ) 
 if (loader) {
   return <Loader />
 }
+
 
   return (
     <>

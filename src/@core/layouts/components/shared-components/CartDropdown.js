@@ -131,7 +131,11 @@ const NotificationDropdown = ({ placeOrder, data }) => {
       .then(res => {
         if (res.data.responseCode === 2000) {
           toast.success('Order Placed Successfully')
-          router.push('/')
+          router.push({
+            pathname: '/',
+            query: { reloaded: 1},
+          })
+         
         }
       })
       .catch(err => {
